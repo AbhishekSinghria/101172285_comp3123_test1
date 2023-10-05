@@ -1,0 +1,41 @@
+const fs = require('fs');
+const path = require('path');
+
+function createLogs() {
+  const logsDir = path.join(__dirname, 'Logs');
+
+  // Create the Logs directory if it does not exist
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir);
+  }
+
+  // Change the current process working directory to Logs
+  process.chdir(logsDir);
+
+  console.log('Creating log files:');
+  for (let i = 0; i < 10; i++) {
+    const fileName = `log${i}.txt`;
+    fs.writeFileSync(fileName, `This is log file ${i}`);
+    console.log(fileName);
+  }
+
+  console.log('Log files created.');
+
+  // Remove log files and directory after creation
+  console.log('Deleting log files:');
+  const files = fs.readdirSync(logsDir);
+
+  // Remove each log file
+  files.forEach(file => {
+    const filePath = path.join(logsDir, file);
+    fs.unlinkSync(filePath);
+    console.log(`delete files...${file}`);
+  });
+
+  // Remove the Logs directory itself
+  fs.rmdirSync(logsDir);
+  console.log('Logs directory removed.');
+}
+
+createLogs();
+
